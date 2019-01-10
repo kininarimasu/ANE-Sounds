@@ -5,7 +5,7 @@ import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 import com.digitalstrawberry.nativeExtensions.anesounds.ANESoundsContext;
 
-public class PlaySound implements FREFunction
+public class PlaySoundFast implements FREFunction
 {
 	@Override
 	public FREObject call( FREContext context, FREObject[] args )
@@ -15,15 +15,10 @@ public class PlaySound implements FREFunction
 		try
 		{
 			int soundId = args[0].getAsInt();
-			int streamId = soundsContext.soundPool.play(
-				soundId, // soundID
-				1.0f, // leftVolume
-				1.0f, // rightVolume
-				1, // priority
-				0, // loop
-				1.0f // rate
-			);
-            return FREObject.newObject(streamId);
+			if (soundId != -1)
+			{
+				soundsContext.soundThread.sounds.add(soundId);
+			}
 		}
 		catch(Exception e)
 		{

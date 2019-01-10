@@ -35,6 +35,7 @@ public class ANESoundsContext extends FREContext
 		Map<String, FREFunction> functionMap = new HashMap<String, FREFunction>();
 		functionMap.put("initialize", new Initialize());
 		functionMap.put("loadSound", new LoadSound());
+		functionMap.put("playSoundFast", new PlaySoundFast());
 		functionMap.put("playSound", new PlaySound());
 		functionMap.put("playSoundLoop", new PlaySoundLoop());
 		functionMap.put("unloadSound", new UnloadSound());

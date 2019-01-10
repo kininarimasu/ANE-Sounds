@@ -143,76 +143,60 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 
 			return file.nativePath;
 		}
+		
+		
+		private function playSoundFlash(soundId:int, loop:int = 0):int
+		{
+			for each(var soundInfo:SoundInfo in _sounds)
+			{
+				if(soundInfo.id == soundId)
+				{
+					var sound:Sound = soundInfo.sound;
+					sStreamId++;
+					var channel:SoundChannel = sound.play(0, loop);
+					channel.addEventListener(Event.SOUND_COMPLETE, onSoundChannelCompleted);
+					_streams[sStreamId] = channel;
+					soundInfo.addStream(sStreamId);
+					return sStreamId;
+				}
+			}
+			trace('[ANESounds] Sound with id', soundId, 'not found.');
+			return 0;
+		}
 
 
-		public function playSound(soundId:int):void
+		public function playSoundFast(soundId:int):void
 		{
 			if(_extContext == null)
 			{
-				var leftVolume:Number = 1.0;
-				var rightVolume:Number = 1.0;
-				var loop:int = 0;
-			
-				for each(var soundInfo:SoundInfo in _sounds)
-				{
-					if(soundInfo.id == soundId)
-					{
-						var sound:Sound = soundInfo.sound;
-
-						var totalVolume:Number = leftVolume + rightVolume;
-						var volume:Number = totalVolume / 2;
-						var pan:Number = (rightVolume / totalVolume) - (leftVolume / totalVolume);
-						var soundTransform:SoundTransform = new SoundTransform(volume, pan);
-
-						sStreamId++;
-						var channel:SoundChannel = sound.play(0, loop, soundTransform);
-						channel.addEventListener(Event.SOUND_COMPLETE, onSoundChannelCompleted);
-						_streams[sStreamId] = channel;
-						soundInfo.addStream(sStreamId);
-						return;
-					}
-				}
-				trace('[ANESounds] Sound with id', soundId, 'not found.');
+				playSoundFlash(soundId);
 				return;
 			}
 
-			_extContext.call('playSound', soundId);
+			_extContext.call('playSoundFast', soundId);
 			return;
 		}
 
 
-		public function playSoundLoop(soundId:int):int
+		public function playSound(soundId:int):int
 		{
 			if(_extContext == null)
 			{
-				var leftVolume:Number = 1.0;
-				var rightVolume:Number = 1.0;
-				var loop:int = int.MAX_VALUE;
-			
-				for each(var soundInfo:SoundInfo in _sounds)
-				{
-					if(soundInfo.id == soundId)
-					{
-						var sound:Sound = soundInfo.sound;
-
-						var totalVolume:Number = leftVolume + rightVolume;
-						var volume:Number = totalVolume / 2;
-						var pan:Number = (rightVolume / totalVolume) - (leftVolume / totalVolume);
-						var soundTransform:SoundTransform = new SoundTransform(volume, pan);
-
-						sStreamId++;
-						var channel:SoundChannel = sound.play(0, loop, soundTransform);
-						channel.addEventListener(Event.SOUND_COMPLETE, onSoundChannelCompleted);
-						_streams[sStreamId] = channel;
-						soundInfo.addStream(sStreamId);
-						return sStreamId;
-					}
-				}
-				trace('[ANESounds] Sound with id', soundId, 'not found.');
-				return 0;
+				return playSoundFlash(soundId);
 			}
 
-			return _extContext.call('playSoundLoop', soundId) as int;
+			return _extContext.call('playSound', soundId) as int;
+		}
+
+
+		public function playSoundLoop(soundId:int, loop:int):int
+		{
+			if(_extContext == null)
+			{
+				return playSoundFlash(soundId, loop);
+			}
+
+			return _extContext.call('playSoundLoop', soundId, loop) as int;
 		}
 
 
