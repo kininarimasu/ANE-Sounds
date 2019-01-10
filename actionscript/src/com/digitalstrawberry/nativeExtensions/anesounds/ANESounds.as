@@ -187,7 +187,7 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 			{
 				var leftVolume:Number = 1.0;
 				var rightVolume:Number = 1.0;
-				var loop:int = -1;
+				var loop:int = int.MAX_VALUE;
 			
 				for each(var soundInfo:SoundInfo in _sounds)
 				{
