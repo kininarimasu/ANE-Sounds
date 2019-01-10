@@ -20,7 +20,7 @@ public class UnloadSound implements FREFunction {
             soundId = args[0].getAsInt();
 
             // Stop all streams for this sound
-            List<Integer> streams = soundsContext.soundStreams.get(soundId);
+            /*List<Integer> streams = soundsContext.soundStreams.get(soundId);
             if(streams != null)
             {
                 for (Integer streamId : streams)
@@ -28,7 +28,7 @@ public class UnloadSound implements FREFunction {
                     soundsContext.soundPool.stop(streamId);
                 }
                 soundsContext.soundStreams.remove(soundId);
-            }
+            }*/
 
             return FREObject.newObject(soundsContext.soundPool.unload(soundId));
         }

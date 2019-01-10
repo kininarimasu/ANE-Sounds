@@ -145,10 +145,50 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 		}
 
 
-		public function playSound(soundId:int, leftVolume:Number = 1.0, rightVolume:Number = 1.0, loop:int = 0, playbackRate:Number = 1.0):int
+		public function playSound(soundId:int):void
 		{
 			if(_extContext == null)
 			{
+				var leftVolume:Number = 1.0;
+				var rightVolume:Number = 1.0;
+				var loop:int = 0;
+			
+				for each(var soundInfo:SoundInfo in _sounds)
+				{
+					if(soundInfo.id == soundId)
+					{
+						var sound:Sound = soundInfo.sound;
+
+						var totalVolume:Number = leftVolume + rightVolume;
+						var volume:Number = totalVolume / 2;
+						var pan:Number = (rightVolume / totalVolume) - (leftVolume / totalVolume);
+						var soundTransform:SoundTransform = new SoundTransform(volume, pan);
+
+						sStreamId++;
+						var channel:SoundChannel = sound.play(0, loop, soundTransform);
+						channel.addEventListener(Event.SOUND_COMPLETE, onSoundChannelCompleted);
+						_streams[sStreamId] = channel;
+						soundInfo.addStream(sStreamId);
+						return;
+					}
+				}
+				trace('[ANESounds] Sound with id', soundId, 'not found.');
+				return;
+			}
+
+			_extContext.call('playSound', soundId);
+			return;
+		}
+
+
+		public function playSoundLoop(soundId:int):int
+		{
+			if(_extContext == null)
+			{
+				var leftVolume:Number = 1.0;
+				var rightVolume:Number = 1.0;
+				var loop:int = 1;
+			
 				for each(var soundInfo:SoundInfo in _sounds)
 				{
 					if(soundInfo.id == soundId)
@@ -172,7 +212,7 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 				return 0;
 			}
 
-			return _extContext.call('playSound', soundId, leftVolume, rightVolume, loop, playbackRate) as int;
+			return _extContext.call('playSoundLoop', soundId) as int;
 		}
 
 
@@ -262,7 +302,7 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 		private function onSoundChannelCompleted(event:Event):void
 		{
 			var channel:SoundChannel = SoundChannel(event.currentTarget);
-			for(var streamId:int in _streams)
+			for(var streamId:* in _streams)
 			{
 				if(channel == _streams[streamId])
 				{

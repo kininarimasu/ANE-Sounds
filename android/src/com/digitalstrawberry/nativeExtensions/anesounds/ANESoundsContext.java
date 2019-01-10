@@ -13,8 +13,10 @@ public class ANESoundsContext extends FREContext
 {
 	public SoundPool soundPool;
 
+	public SoundThread soundThread;
+
     // Sound id mapped to a list of stream ids
-    public Map<Integer, List<Integer>> soundStreams;
+    //public Map<Integer, List<Integer>> soundStreams;
 
 	ANESoundsContext()
 	{
@@ -24,7 +26,7 @@ public class ANESoundsContext extends FREContext
 	@Override
 	public void dispose()
 	{
-
+		soundThread.sounds.add(-1);
 	}
 
 	@Override
@@ -34,6 +36,7 @@ public class ANESoundsContext extends FREContext
 		functionMap.put("initialize", new Initialize());
 		functionMap.put("loadSound", new LoadSound());
 		functionMap.put("playSound", new PlaySound());
+		functionMap.put("playSoundLoop", new PlaySoundLoop());
 		functionMap.put("unloadSound", new UnloadSound());
 		functionMap.put("stopStream", new StopStream());
 		functionMap.put("setVolume", new SetVolume());
