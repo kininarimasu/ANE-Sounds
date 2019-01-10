@@ -47,7 +47,14 @@ public class SoundThread extends Thread {
                     break;
                 }
 
-                this.soundPool.play(soundId, 1.0f, 1.0f, 1, 0, 1.0f);
+                this.soundPool.play(
+                    soundId, // soundID
+                    1.0f, // leftVolume
+                    1.0f, // rightVolume
+                    1, // priority
+                    0, // loop
+                    1.0f // rate
+                );
             }
 
         } catch (InterruptedException e) {}

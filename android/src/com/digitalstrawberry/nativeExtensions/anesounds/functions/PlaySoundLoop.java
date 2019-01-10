@@ -15,7 +15,14 @@ public class PlaySoundLoop implements FREFunction
 		try
 		{
 			int soundId = args[0].getAsInt();
-			int streamId = soundsContext.soundPool.play(soundId, 1.0f, 1.0f, 1, 1, 1.0f);
+			int streamId = soundsContext.soundPool.play(
+				soundId, // soundID
+				1.0f, // leftVolume
+				1.0f, // rightVolume
+				1, // priority
+				-1, // loop
+				1.0f // rate
+			);
             return FREObject.newObject(streamId);
 		}
 		catch(Exception e)
