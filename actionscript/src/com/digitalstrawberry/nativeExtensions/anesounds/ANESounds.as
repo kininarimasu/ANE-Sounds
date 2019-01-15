@@ -268,6 +268,77 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 				_extContext.call('setVolume', streamId, clampVolume(leftVolume), clampVolume(rightVolume));
 			}
 		}
+		
+		
+		public function loadMusic(file:File):int
+		{
+			if(_extContext == null)
+			{
+				throw new Error('Music player is not supported on this platform');
+			}
+			
+			if(!file.exists)
+			{
+				throw new Error('Music file ' + file.url + ' does not exist');
+			}
+			
+			return _extContext.call('loadMusic', getNativePath(file)) as int;
+		}
+		
+		
+		public function unloadMusic(id:int):void
+		{
+			if(_extContext == null)
+			{
+				throw new Error('Music player is not supported on this platform');
+			}
+			
+			_extContext.call('unloadMusic', id);
+		}
+		
+		
+		public function playMusic(id:int/*, looping:Boolean*/):void
+		{
+			if(_extContext == null)
+			{
+				throw new Error('Music player is not supported on this platform');
+			}
+			
+			_extContext.call('playMusic', id/*, looping*/);
+		}
+		
+		
+		public function stopMusic(id:int):void
+		{
+			if(_extContext == null)
+			{
+				throw new Error('Music player is not supported on this platform');
+			}
+			
+			_extContext.call('stopMusic', id);
+		}
+		
+		
+		public function muteMusic(id:int):void
+		{
+			if(_extContext == null)
+			{
+				throw new Error('Music player is not supported on this platform');
+			}
+			
+			_extContext.call('muteMusic', id);
+		}
+		
+		
+		public function unmuteMusic(id:int):void
+		{
+			if(_extContext == null)
+			{
+				throw new Error('Music player is not supported on this platform');
+			}
+			
+			_extContext.call('unmuteMusic', id);
+		}
 
 
 		private function onStatus(event:StatusEvent):void

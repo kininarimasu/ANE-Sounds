@@ -15,10 +15,7 @@ public class PlaySoundFast implements FREFunction
 		try
 		{
 			int soundId = args[0].getAsInt();
-			if (soundId != -1)
-			{
-				soundsContext.soundThread.sounds.add(soundId);
-			}
+			soundsContext.getSoundThread().playSound(soundId);
 		}
 		catch(Exception e)
 		{

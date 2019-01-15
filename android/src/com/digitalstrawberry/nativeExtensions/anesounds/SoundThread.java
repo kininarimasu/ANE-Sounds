@@ -5,47 +5,34 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import android.media.SoundPool;
 
-/**
- * Thread for playing sounds
- *
- * @author soh#zolex
- *
- */
 public class SoundThread extends Thread {
 
-    public BlockingQueue<Integer> sounds = new LinkedBlockingQueue<Integer>();
-    public boolean stop = false;
-
+    private BlockingQueue<Object> commands = new LinkedBlockingQueue<Object>();
     private SoundPool soundPool;
 
-    /**
-     * Constructor
-     *
-     * @param soundPool
-     */
     public SoundThread(SoundPool soundPool) {
-
         this.soundPool = soundPool;
     }
 
+    public void playSound(int soundId) {
+        this.commands.add(soundId);
+    }
+
+    public void release() {
+        this.commands.add("exit");
+    }
+
     @Override
-    /**
-     * Wait for sounds to play
-     */
     public void run() {
-
         try {
+            while (true) {
+                Object command = this.commands.take();
 
-            int soundId;
-            while (!this.stop) {
-
-                soundId = this.sounds.take();
-
-                if (soundId == -1) {
-
-                    this.stop = true;
-                    break;
+                if (command.equals("exit")) {
+                    return;
                 }
+
+                int soundId = (Integer)command;
 
                 this.soundPool.play(
                     soundId, // soundID
@@ -56,7 +43,6 @@ public class SoundThread extends Thread {
                     1.0f // rate
                 );
             }
-
         } catch (InterruptedException e) {}
     }
 }

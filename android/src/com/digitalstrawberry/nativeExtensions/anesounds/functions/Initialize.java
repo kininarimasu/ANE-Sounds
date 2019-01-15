@@ -11,8 +11,6 @@ import com.digitalstrawberry.nativeExtensions.anesounds.ANESoundsContext;
 import java.util.HashMap;
 import java.util.List;
 
-import com.digitalstrawberry.nativeExtensions.anesounds.SoundThread;
-
 public class Initialize implements FREFunction
 {
 	@Override
@@ -49,9 +47,6 @@ public class Initialize implements FREFunction
             soundsContext.soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
         }
         context.getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        soundsContext.soundThread = new SoundThread(soundsContext.soundPool);
-        soundsContext.soundThread.start();
 
         return null;
     }
