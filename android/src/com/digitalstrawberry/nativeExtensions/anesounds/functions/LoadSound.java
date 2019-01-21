@@ -13,17 +13,15 @@ import java.util.Queue;
 
 public class LoadSound implements FREFunction, SoundPool.OnLoadCompleteListener
 {
-    // private static int sSoundId = 1;
+    private static int sSoundId = 1;
 
     private ANESoundsContext mContext;
-    // private Queue<String> mLoadQueue = new LinkedList<String>();
-    // private boolean mIsLoading = false;
+    private Queue<String> mLoadQueue = new LinkedList<String>();
+    private boolean mIsLoading = false;
 
 	@Override
 	public FREObject call( FREContext context, FREObject[] args )
 	{
-		// ANESoundsContext soundsContext = (ANESoundsContext) context;
-
         mContext = (ANESoundsContext) context;
         mContext.soundPool.setOnLoadCompleteListener(this);
 
@@ -31,45 +29,43 @@ public class LoadSound implements FREFunction, SoundPool.OnLoadCompleteListener
 		{
             String path = args[0].getAsString();
 
-            // if(mIsLoading)
-            // {
-            //     mLoadQueue.add(path);
-            //     return FREObject.newObject(sSoundId++);
-            // }
+            if(mIsLoading)
+            {
+                mLoadQueue.add(path);
+                return FREObject.newObject(sSoundId++);
+            }
 
-            // mIsLoading = true;
-            // mLoadQueue.add(path);
-            // loadNextSound();
+            mIsLoading = true;
+            mLoadQueue.add(path);
+            loadNextSound();
 
-			// return FREObject.newObject(sSoundId++);
-
-            return FREObject.newObject(mContext.soundPool.load(path, 1));
+			return FREObject.newObject(sSoundId++);
 		}
 		catch(Exception e)
 		{
-			Log.e("SoundsANE", "Sound file not found!");
-			Log.e("SoundsANE", e.getMessage());
+			Log.i("SoundsANE", "Sound file not found!");
+			Log.i("SoundsANE", e.getMessage());
 		}
 
 		return null;
 	}
 
-    // private void loadNextSound()
-    // {
-    //     if(mLoadQueue.size() == 0)
-    //     {
-    //         mIsLoading = false;
-    //         return;
-    //     }
+    private void loadNextSound()
+    {
+        if(mLoadQueue.size() == 0)
+        {
+            mIsLoading = false;
+            return;
+        }
 
-    //     String path = mLoadQueue.remove();
-    //     mContext.soundPool.load(path, 1);
-    // }
+        String path = mLoadQueue.remove();
+        mContext.soundPool.load(path, 1);
+    }
 
     @Override
     public void onLoadComplete(SoundPool soundPool, int sampleId, int status)
     {
         mContext.dispatchStatusEventAsync(SoundEvent.LOAD, String.valueOf(sampleId));
-        // loadNextSound();
+        loadNextSound();
     }
 }
