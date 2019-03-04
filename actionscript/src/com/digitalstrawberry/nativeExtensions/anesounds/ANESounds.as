@@ -16,7 +16,6 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 
 	public class ANESounds extends EventDispatcher
 	{
-		public static const VERSION:String = "1.7";
 		private static var _instance:ANESounds;
 		private static var sMaxStreams:int = 10;
 		private static var sStreamId:int = 0;
@@ -297,14 +296,25 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 		}
 		
 		
-		public function playMusic(id:int/*, looping:Boolean*/):void
+		public function playMusic(id:int):void
 		{
 			if(_extContext == null)
 			{
 				throw new Error('Music player is not supported on this platform');
 			}
 			
-			_extContext.call('playMusic', id/*, looping*/);
+			_extContext.call('playMusic', id);
+		}
+		
+		
+		public function pauseMusic(id:int):void
+		{
+			if(_extContext == null)
+			{
+				throw new Error('Music player is not supported on this platform');
+			}
+			
+			_extContext.call('pauseMusic', id);
 		}
 		
 		
@@ -316,28 +326,6 @@ package com.digitalstrawberry.nativeExtensions.anesounds
 			}
 			
 			_extContext.call('stopMusic', id);
-		}
-		
-		
-		public function muteMusic(id:int):void
-		{
-			if(_extContext == null)
-			{
-				throw new Error('Music player is not supported on this platform');
-			}
-			
-			_extContext.call('muteMusic', id);
-		}
-		
-		
-		public function unmuteMusic(id:int):void
-		{
-			if(_extContext == null)
-			{
-				throw new Error('Music player is not supported on this platform');
-			}
-			
-			_extContext.call('unmuteMusic', id);
 		}
 
 

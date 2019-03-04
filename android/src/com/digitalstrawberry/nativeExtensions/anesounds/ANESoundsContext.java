@@ -110,8 +110,14 @@ public class ANESoundsContext extends FREContext
 		functionMap.put("playMusic", new MusicPlayer() {
 			public FREObject action(ANESoundsContext context, FREObject[] args) throws FRETypeMismatchException, FREInvalidObjectException, FREWrongThreadException {
 				int id = args[0].getAsInt();
-				// boolean looping = args[1].getAsBool();
-				context.getMusicThread().playMusic(id/*, looping*/);
+				context.getMusicThread().playMusic(id);
+				return null;
+			}
+		});
+		functionMap.put("pauseMusic", new MusicPlayer() {
+			public FREObject action(ANESoundsContext context, FREObject[] args) throws FRETypeMismatchException, FREInvalidObjectException, FREWrongThreadException {
+				int id = args[0].getAsInt();
+				context.getMusicThread().pauseMusic(id);
 				return null;
 			}
 		});
@@ -119,20 +125,6 @@ public class ANESoundsContext extends FREContext
 			public FREObject action(ANESoundsContext context, FREObject[] args) throws FRETypeMismatchException, FREInvalidObjectException, FREWrongThreadException {
 				int id = args[0].getAsInt();
 				context.getMusicThread().stopMusic(id);
-				return null;
-			}
-		});
-		functionMap.put("muteMusic", new MusicPlayer() {
-			public FREObject action(ANESoundsContext context, FREObject[] args) throws FRETypeMismatchException, FREInvalidObjectException, FREWrongThreadException {
-				int id = args[0].getAsInt();
-				context.getMusicThread().muteMusic(id);
-				return null;
-			}
-		});
-		functionMap.put("unmuteMusic", new MusicPlayer() {
-			public FREObject action(ANESoundsContext context, FREObject[] args) throws FRETypeMismatchException, FREInvalidObjectException, FREWrongThreadException {
-				int id = args[0].getAsInt();
-				context.getMusicThread().unmuteMusic(id);
 				return null;
 			}
 		});
